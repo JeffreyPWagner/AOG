@@ -12,7 +12,79 @@ public class AI {
 	}
 
 	public int[] computeMove(GameState state) {
-		System.out.println("AI returning canned move for game state - " + state);
-		return moveList.next();
+		int[] move = new int[2];
+		
+		for (int r = 0; r < 8; r++) {
+			for (int c = 0; c < 8; c++) {
+				System.out.println(r);
+				System.out.println(c);
+				
+				if (isLegal(r, c, state.getBoard(), state.getPlayer())){
+					move[0] = r;
+					move[1] = c;
+					return move;
+				}
+			}
+		}
+		System.out.println("no legal move found");
+		return move;
+		
+	}
+	
+	public boolean isLegal (int row, int column, int[][] board, int player) {
+		int r = row;
+		int c = column;
+		
+		System.out.println("starting check");
+		
+		if (board[r][c]==0) {
+			int checkRow;
+			int checkCol;
+			boolean end;
+			int position;
+			
+			for (int y = -1; y <= 1; y++) {
+				for (int x = -1; x <= 1; x++) {
+					System.out.println("first for loop");
+					checkRow = r + y;
+					checkCol = c + x;
+					end = false;
+					
+					if (checkRow > 7 || checkRow < 0 || checkCol > 7 || checkCol < 0) {
+						continue;
+					}
+					
+					System.out.println("first cont");
+					
+					position = board[checkRow][checkCol];
+					
+					if (position == 0 || position == player) {
+						continue;
+					}
+					System.out.println("check 1");
+					
+					direction: while (!end) {
+						checkRow += y;
+						checkCol += x;
+						
+						System.out.println("check 2");
+						
+						if (checkRow > 7 || checkRow < 0 || checkCol > 7 || checkCol <0) {
+							break direction;
+						}
+						
+						if (position == player) {
+							return true;
+						}
+						
+						else if (position == 0) {
+							end = true;
+						}
+					}
+					
+				}
+			}
+		}
+		return false;
 	}
 }
