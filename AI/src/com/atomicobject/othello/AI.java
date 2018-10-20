@@ -33,6 +33,21 @@ public class AI {
 				
 				if (isLegal(r, c, state.getBoard(), state.getPlayer())>0){
 					if (ranks[r][c] >= ranks[ourMove.getCoord()[0]][ourMove.getCoord()[1]]) {
+						ourMove = new Move(r,c);
+						ourMove.setFlips(isLegal(r, c, state.getBoard(), state.getPlayer()));
+						
+					}
+				}
+			}
+		}
+		
+		for (int r = 0; r < 8; r++) {
+			for (int c = 0; c < 8; c++) {
+				System.out.println(r);
+				System.out.println(c);
+				
+				if (isLegal(r, c, state.getBoard(), state.getPlayer())>0){
+					if (ranks[r][c] >= ranks[ourMove.getCoord()[0]][ourMove.getCoord()[1]]) {
 						if(isLegal(r, c, state.getBoard(), state.getPlayer()) > ourMove.getFlips()) {
 							ourMove = new Move(r,c);
 							ourMove.setFlips(isLegal(r, c, state.getBoard(), state.getPlayer()));
@@ -41,6 +56,7 @@ public class AI {
 				}
 			}
 		}
+		
 		return ourMove.getCoord();
 	}
 	
