@@ -1,21 +1,13 @@
 package com.atomicobject.othello;
 
 import java.util.Arrays;
+import java.util.*;
 import java.util.ListIterator;
 
 public class AI {
 	
-	int[][] ranks = {
-			{7,2,5,4,4,5,2,7},
-			{2,1,3,3,3,3,1,2},
-			{5,3,6,5,5,6,3,5},
-			{4,3,5,6,6,5,3,4},
-			{4,3,5,6,6,5,3,4},
-			{5,3,6,5,5,6,3,5},
-			{2,1,3,3,3,3,1,2},
-			{7,2,5,4,4,5,2,7}
-			
-	};
+	int maxRank = 0;
+	int maxFlips = 0;
 	
 	ListIterator<int[]> moveList;
 
@@ -25,22 +17,61 @@ public class AI {
 
 	public int[] computeMove(GameState state) {
 		Move ourMove = new Move(1,1);
+		ArrayList<Move> legalMoves = new ArrayList<Move>();
+		
 		
 		for (int r = 0; r < 8; r++) {
 			for (int c = 0; c < 8; c++) {
-				System.out.println(r);
-				System.out.println(c);
-				
 				if (isLegal(r, c, state.getBoard(), state.getPlayer())>0){
-					if (ranks[r][c] >= ranks[ourMove.getCoord()[0]][ourMove.getCoord()[1]]) {
-						if(isLegal(r, c, state.getBoard(), state.getPlayer()) > ourMove.getFlips()) {
-							ourMove = new Move(r,c);
-							ourMove.setFlips(isLegal(r, c, state.getBoard(), state.getPlayer()));
-						}
-					}
+					legalMoves.add(new Move(r,c));
+					legalMoves.get(legalMoves.size()-1).setFlips(isLegal(r, c, state.getBoard(), state.getPlayer()));
 				}
 			}
 		}
+		
+		for (Move m: legalMoves) {
+			if (m.getRank() > maxRank) {
+				maxRank = m.getRank();
+			}
+		}
+		/*
+		for (int i = 0; i < legalMoves.size(); i++) {
+			if (legalMoves.get(i).getRank() < maxRank) {
+				legalMoves.remove(i);
+			}
+		}
+		*/
+		
+		for (Iterator<Move> iterator = legalMoves.iterator(); iterator.hasNext();) {
+		    Move move = iterator.next();
+		    if (move.getRank() < maxRank) {
+		        iterator.remove();
+		    }
+		}
+		
+		
+		for (Move m: legalMoves) {
+			if (m.getFlips() > maxFlips) {
+				maxFlips = m.getFlips();
+			}
+		}
+		
+		/*
+		for (int i = 0; i < legalMoves.size(); i++) {
+			if (legalMoves.get(i).getFlips() < maxFlips) {
+				legalMoves.remove(i);
+			}
+		}	
+		*/
+		
+		for (Iterator<Move> iterator = legalMoves.iterator(); iterator.hasNext();) {
+		    Move move = iterator.next();
+		    if (move.getFlips() < maxFlips) {
+		        iterator.remove();
+		    }
+		}
+		
+		ourMove = legalMoves.get(0);
 		return ourMove.getCoord();
 	}
 	
