@@ -24,27 +24,27 @@ public class AI {
 	}
 
 	public int[] computeMove(GameState state) {
-		int[] move = {1,1};
+		Move ourMove = new Move(1,1);
 		
 		for (int r = 0; r < 8; r++) {
 			for (int c = 0; c < 8; c++) {
 				System.out.println(r);
 				System.out.println(c);
 				
-				if (isLegal(r, c, state.getBoard(), state.getPlayer())){
-					if (ranks[r][c] >= ranks[move[0]][move[1]]) {
-					move[0] = r;
-					move[1] = c;
+				if (isLegal(r, c, state.getBoard(), state.getPlayer())>0){
+					if (ranks[r][c] >= ranks[ourMove.getCoord()[0]][ourMove.getCoord()[1]]) {
+					ourMove = new Move(r,c);
 					}
 				}
 			}
 		}
-		return move;
+		return ourMove.getCoord();
 	}
 	
-	public boolean isLegal (int row, int column, int[][] board, int player) {
+	public int isLegal (int row, int column, int[][] board, int player) {
 		int r = row;
 		int c = column;
+		int flips = 0;
 		
 		System.out.println("starting check");
 		
@@ -53,6 +53,7 @@ public class AI {
 			int checkCol;
 			boolean end;
 			int position;
+			int potFlips;
 			
 			for (int x = -1; x <= 1; x++) {
 				for (int y = -1; y <= 1; y++) {
@@ -60,6 +61,7 @@ public class AI {
 					checkRow = r + y;
 					checkCol = c + x;
 					end = false;
+					potFlips = 0;
 					
 					if (checkRow > 7 || checkRow < 0 || checkCol > 7 || checkCol < 0) {
 						continue;
@@ -78,6 +80,7 @@ public class AI {
 					System.out.println("check 1");
 					
 					direction: while (!end) {
+						potFlips += 1;
 						checkRow += y;
 						checkCol += x;
 						
@@ -90,7 +93,9 @@ public class AI {
 						position = board[checkRow][checkCol];
 						
 						if (position == player) {
-							return true;
+							flips += potFlips;
+							end = true;
+							
 							
 						}
 						
@@ -102,6 +107,7 @@ public class AI {
 				}
 			}
 		}
-		return false;
+		System.out.println("flips" + flips);
+		return flips;
 	}
 }
