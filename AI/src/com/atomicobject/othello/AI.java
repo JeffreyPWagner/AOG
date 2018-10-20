@@ -5,6 +5,18 @@ import java.util.ListIterator;
 
 public class AI {
 	
+	int[][] ranks = {
+			{7,2,5,4,4,5,2,7},
+			{2,1,3,3,3,3,1,2},
+			{5,3,6,5,5,6,3,5},
+			{4,3,5,6,6,5,3,4},
+			{4,3,5,6,6,5,3,4},
+			{5,3,6,5,5,6,3,5},
+			{2,1,3,3,3,3,1,2},
+			{7,2,5,4,4,5,2,7}
+			
+	};
+	
 	ListIterator<int[]> moveList;
 
 	public AI(int[][] moves) {
@@ -12,7 +24,7 @@ public class AI {
 	}
 
 	public int[] computeMove(GameState state) {
-		int[] move = new int[2];
+		int[] move = {1,1};
 		
 		for (int r = 0; r < 8; r++) {
 			for (int c = 0; c < 8; c++) {
@@ -20,15 +32,14 @@ public class AI {
 				System.out.println(c);
 				
 				if (isLegal(r, c, state.getBoard(), state.getPlayer())){
+					if (ranks[r][c] >= ranks[move[0]][move[1]]) {
 					move[0] = r;
 					move[1] = c;
-					return move;
+					}
 				}
 			}
 		}
-		System.out.println("no legal move found");
 		return move;
-		
 	}
 	
 	public boolean isLegal (int row, int column, int[][] board, int player) {
