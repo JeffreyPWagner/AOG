@@ -43,8 +43,8 @@ public class AI {
 			boolean end;
 			int position;
 			
-			for (int y = -1; y <= 1; y++) {
-				for (int x = -1; x <= 1; x++) {
+			for (int x = -1; x <= 1; x++) {
+				for (int y = -1; y <= 1; y++) {
 					System.out.println("first for loop");
 					checkRow = r + y;
 					checkCol = c + x;
@@ -54,13 +54,16 @@ public class AI {
 						continue;
 					}
 					
-					System.out.println("first cont");
-					
 					position = board[checkRow][checkCol];
+					
+					System.out.println(checkRow);
+					System.out.println(checkCol);
+					System.out.println(position);
 					
 					if (position == 0 || position == player) {
 						continue;
 					}
+					
 					System.out.println("check 1");
 					
 					direction: while (!end) {
@@ -69,12 +72,15 @@ public class AI {
 						
 						System.out.println("check 2");
 						
-						if (checkRow > 7 || checkRow < 0 || checkCol > 7 || checkCol <0) {
+						if (checkRow > 7 || checkRow < 0 || checkCol > 7 || checkCol < 0) {
 							break direction;
 						}
 						
+						position = board[checkRow][checkCol];
+						
 						if (position == player) {
 							return true;
+							
 						}
 						
 						else if (position == 0) {
